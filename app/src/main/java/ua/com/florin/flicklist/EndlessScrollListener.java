@@ -3,7 +3,7 @@ package ua.com.florin.flicklist;
 import android.widget.AbsListView;
 
 /**
- * Loaded from
+ * Kindly reused from
  * https://github.com/thecodepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews
  * on 21.07.14.
  */
@@ -48,7 +48,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             }
         }
 
-        // If it’s still loading, we check to see if the dataset count has
+        // If it’s still loading, we check to see if the data set count has
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
         if (loading && (totalItemCount > previousTotalItemCount)) {
