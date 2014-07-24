@@ -36,32 +36,32 @@ public class MainActivity extends Activity {
             fragmentTransaction.commit();
         }
 
-//        setContentView(R.layout.activity_main);
-//
-//        ListView listView = (ListView) findViewById(R.id.mainListView);
-//
-//        List<String> mList = new ArrayList<String>();
-//        for (int i = 0; i < 11; i++) {
-//            mList.add("Test string " + i);
-//        }
-//
-//        final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(
-//                this,
-//                android.R.layout.simple_list_item_1,
-//                mList);
-//
-//        listView.setAdapter(stringArrayAdapter);
-//
-//        EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                Log.d(TAG, "onLoadMore, page: " + page + ", totalItemsCount: " + totalItemsCount);
-//                for (int i = (page - 1) * 10 + 1; i < (page - 1) * 10 + 11; i++) {
-//                    stringArrayAdapter.add("Added string " + i);
-//                }
-//            }
-//        };
-//        listView.setOnScrollListener(endlessScrollListener);
+        setContentView(R.layout.activity_main);
+
+        ListView listView = (ListView) findViewById(R.id.listView);
+
+        List<String> mList = new ArrayList<String>();
+        for (int i = 0; i < 11; i++) {
+            mList.add("Test string " + i);
+        }
+
+        final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                mList);
+
+        listView.setAdapter(stringArrayAdapter);
+
+        EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d(TAG, "onLoadMore, page: " + page + ", totalItemsCount: " + totalItemsCount);
+                for (int i = (page - 1) * 10 + 1; i < (page - 1) * 10 + 11; i++) {
+                    stringArrayAdapter.add("Added string " + i);
+                }
+            }
+        };
+        listView.setOnScrollListener(endlessScrollListener);
 
     }
 }
