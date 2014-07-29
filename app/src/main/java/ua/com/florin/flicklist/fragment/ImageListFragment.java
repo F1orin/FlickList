@@ -3,13 +3,14 @@ package ua.com.florin.flicklist.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,8 +18,8 @@ import android.widget.Toast;
 
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.util.ImageCache;
+import ua.com.florin.flicklist.util.ImageFetcher;
 import ua.com.florin.flicklist.util.ImageResizer;
-import ua.com.florin.flicklist.util.ImageWorker;
 import ua.com.florin.flicklist.util.MyConst;
 import ua.com.florin.flicklist.view.RecyclingImageView;
 
@@ -36,7 +37,7 @@ public class ImageListFragment extends Fragment {
     private int mImageSize;
     //reference to custom adapter for list filling
     private ImageAdapter mAdapter;
-    private ImageResizer mImageResizer;
+    private ImageFetcher mImageFetcher;
 
     /**
      * Necessary empty constructor
@@ -50,21 +51,35 @@ public class ImageListFragment extends Fragment {
         // notify that the fragment wants to add options in action bar
         setHasOptionsMenu(true);
 
+        // Fetch screen height and width, to use as our max size when loading images as this
+        // activity runs full screen
+        final DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        final int height = displayMetrics.heightPixels;
+        final int width = displayMetrics.widthPixels;
+
+        // For this sample we'll use half of the longest width to resize our images. As the
+        // image scaling ensures the image is larger than this, we should be left with a
+        // resolution that is appropriate for both portrait and landscape. For best image quality
+        // we shouldn't divide by 2, but this will use more memory and require a larger memory
+        // cache.
+        final int longest = (height > width ? height : width);
+
         // set image size from resources
         mImageSize = getResources().getDimensionPixelSize(R.dimen.image_size);
 
         // initialize adapter
-        mAdapter = new ImageAdapter(getActivity(), MyConst.imageSet);
+        mAdapter = new ImageAdapter(getActivity(), MyConst.imageUrls);
 
         ImageCache.ImageCacheParams cacheParams =
                 new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
 
         cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
 
-        // The ImageWorker loads images to ListView asynchronously
-        mImageResizer = new ImageResizer(getActivity(), mImageSize);
-        mImageResizer.setLoadingImage(R.drawable.empty_photo);
-        mImageResizer.addImageCache(getActivity().getFragmentManager(), cacheParams);
+        // The ImageResizer loads images to ListView asynchronously
+        mImageFetcher = new ImageFetcher(getActivity(), longest);
+        mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+        mImageFetcher.addImageCache(getActivity().getFragmentManager(), cacheParams);
     }
 
     @Override
@@ -78,22 +93,22 @@ public class ImageListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mImageResizer.setExitTasksEarly(false);
+        mImageFetcher.setExitTasksEarly(false);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mImageResizer.setPauseWork(false);
-        mImageResizer.setExitTasksEarly(true);
-        mImageResizer.flushCache();
+        mImageFetcher.setPauseWork(false);
+        mImageFetcher.setExitTasksEarly(true);
+        mImageFetcher.flushCache();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mImageResizer.closeCache();
+        mImageFetcher.closeCache();
     }
 
     @Override
@@ -105,7 +120,7 @@ public class ImageListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.clear_cache:
-                mImageResizer.clearCache();
+                mImageFetcher.clearCache();
                 Toast.makeText(getActivity(), R.string.clear_cache_complete_toast,
                         Toast.LENGTH_SHORT).show();
                 return true;
@@ -113,14 +128,20 @@ public class ImageListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private static class ViewHolder {
+        private ImageView imageView;
+    }
+
     private class ImageAdapter extends BaseAdapter {
 
         private final Context mContext;
-        private final int[] images;
+        private final String[] images;
+        private LayoutInflater mInflater;
 
-        private ImageAdapter(Context context, int[] images) {
+        private ImageAdapter(Context context, String[] images) {
             mContext = context;
             this.images = images;
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -139,20 +160,32 @@ public class ImageListFragment extends Fragment {
         }
 
         @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder holder;
 
             // Now handle the main ImageView thumbnails
             ImageView imageView;
             if (convertView == null) { // if it's not recycled, instantiate and initialize
-                imageView = new RecyclingImageView(mContext);
+                convertView = mInflater.inflate(R.layout.image_list_row, null);
+                holder = new ViewHolder();
+                holder.imageView = (ImageView) convertView.findViewById(R.id.recyclingImageView);
+                convertView.setTag(holder);
+//                imageView = new RecyclingImageView(mContext);
             } else { // Otherwise re-use the converted view
-                imageView = (ImageView) convertView;
+                holder = (ViewHolder) convertView.getTag();
+//                imageView = (ImageView) convertView;
             }
 
             // set image to list item
-            mImageResizer.loadImage(MyConst.imageSet[position], imageView);
+            mImageFetcher.loadImage(images[position], holder.imageView);
 
-            return imageView;
+            return convertView;
         }
 
 
