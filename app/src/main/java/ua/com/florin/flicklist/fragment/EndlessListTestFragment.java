@@ -11,12 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ua.com.florin.flicklist.EndlessScrollListener;
+import ua.com.florin.flicklist.util.EndlessScrollListener;
 import ua.com.florin.flicklist.R;
 
 /**
@@ -51,7 +50,7 @@ public class EndlessListTestFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.endless_list_test_fragment, container, false);
+        final View view = inflater.inflate(R.layout.fragment_endless_list_test, container, false);
         final ListView mListView = (ListView) view.findViewById(R.id.endlessListView);
 
         mListView.setAdapter(mAdapter);

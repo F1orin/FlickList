@@ -65,7 +65,7 @@ public class FlickrTestFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.flickr_test_fragment, container, false);
+        final View view = inflater.inflate(R.layout.fragment_flickr_test, container, false);
         mImageView = (ImageView) view.findViewById(R.id.flickrImageView);
         return view;
     }

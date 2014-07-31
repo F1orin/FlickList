@@ -25,6 +25,8 @@ public class MainActivity extends Activity {
         Button endlessListButton = (Button) findViewById(R.id.endlessListButton);
         Button imageListButton = (Button) findViewById(R.id.imageListButton);
         Button flickrTestButton = (Button) findViewById(R.id.flickrTestButton);
+        Button endlessImageListTestButton = (Button) findViewById(R.id.endlessImageListTestButton);
+        Button endlessFlickrTestButton = (Button) findViewById(R.id.endlessFlickrTestButton);
 
         View.OnClickListener buttonListener = new View.OnClickListener() {
             @Override
@@ -42,6 +44,14 @@ public class MainActivity extends Activity {
                     case R.id.flickrTestButton:
                         intent = new Intent(MainActivity.this, FlickrTestActivity.class);
                         startActivity(intent);
+                        return;
+                    case R.id.endlessImageListTestButton:
+                        intent = new Intent(MainActivity.this, EndlessImageListActivity.class);
+                        startActivity(intent);
+                        return;
+                    case R.id.endlessFlickrTestButton:
+                        intent = new Intent(MainActivity.this, EndlessFlickrActivity.class);
+                        startActivity(intent);
 //                        return;
                 }
             }
@@ -49,5 +59,7 @@ public class MainActivity extends Activity {
         endlessListButton.setOnClickListener(buttonListener);
         imageListButton.setOnClickListener(buttonListener);
         flickrTestButton.setOnClickListener(buttonListener);
+        endlessImageListTestButton.setOnClickListener(buttonListener);
+        endlessFlickrTestButton.setOnClickListener(buttonListener);
     }
 }

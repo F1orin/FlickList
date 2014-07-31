@@ -29,7 +29,12 @@
         <activity
             android:name=".activity.FlickrTestActivity"
             android:label="@string/app_name" />
-
+        <activity
+            android:name=".activity.EndlessImageListActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".activity.EndlessFlickrActivity"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

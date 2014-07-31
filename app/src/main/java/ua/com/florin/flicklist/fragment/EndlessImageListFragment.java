@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,31 +16,38 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import ua.com.florin.flicklist.R;
+import ua.com.florin.flicklist.util.EndlessScrollListener;
 import ua.com.florin.flicklist.util.ImageCache;
 import ua.com.florin.flicklist.util.ImageFetcher;
 import ua.com.florin.flicklist.util.MyConst;
+import ua.com.florin.flicklist.view.RecyclingImageView;
 
 /**
- * Created by florin on 22.07.14.
+ * Created by florin on 29.07.14.
  */
-public class ImageListFragment extends Fragment {
+public class EndlessImageListFragment extends Fragment {
 
     /**
      * Logging tag constant
      */
-    private static final String TAG = "ImageListFragment";
+    private static final String TAG = "EndlessImageListFragment";
     private static final String IMAGE_CACHE_DIR = "imgCache";
 
     private int mImageSize;
     //reference to custom adapter for list filling
     private ImageAdapter mAdapter;
     private ImageFetcher mImageFetcher;
+    private List<String> mImageList;
 
     /**
      * Necessary empty constructor
      */
-    public ImageListFragment() {
+    public EndlessImageListFragment() {
     }
 
     @Override
@@ -60,13 +68,12 @@ public class ImageListFragment extends Fragment {
         // resolution that is appropriate for both portrait and landscape. For best image quality
         // we shouldn't divide by 2, but this will use more memory and require a larger memory
         // cache.
-        final int longest = (height > width ? height : width);
+        final int longest = (height > width ? height : width) / 2;
 
-        // set image size from resources
-        mImageSize = getResources().getDimensionPixelSize(R.dimen.image_size);
+        mImageList = new LinkedList<String>(Arrays.asList(MyConst.imageUrlsShort));
 
         // initialize adapter
-        mAdapter = new ImageAdapter(getActivity(), MyConst.imageUrls);
+        mAdapter = new ImageAdapter(getActivity(), mImageList);
 
         ImageCache.ImageCacheParams cacheParams =
                 new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
@@ -84,6 +91,18 @@ public class ImageListFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_image_list, container, false);
         final ListView mListView = (ListView) view.findViewById(R.id.listView);
         mListView.setAdapter(mAdapter);
+
+        EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                List<String> urlsToAdd = Arrays.asList(MyConst.imageUrlsShort);
+                Log.d(TAG, "page:" + page + ", total:" + totalItemsCount);
+                mImageList.addAll(urlsToAdd);
+                mAdapter.notifyDataSetChanged();
+            }
+        };
+        mListView.setOnScrollListener(endlessScrollListener);
+
         return view;
     }
 
@@ -125,17 +144,13 @@ public class ImageListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private static class ViewHolder {
-        private ImageView imageView;
-    }
-
     private class ImageAdapter extends BaseAdapter {
 
         private final Context mContext;
-        private final String[] images;
+        private final List<String> images;
         private LayoutInflater mInflater;
 
-        private ImageAdapter(Context context, String[] images) {
+        private ImageAdapter(Context context, List<String> images) {
             mContext = context;
             this.images = images;
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -143,12 +158,12 @@ public class ImageListFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return images.length;
+            return images.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return images[position];
+            return images.get(position);
         }
 
         @Override
@@ -164,25 +179,18 @@ public class ImageListFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            ViewHolder holder;
-
             // Now handle the main ImageView thumbnails
             ImageView imageView;
             if (convertView == null) { // if it's not recycled, instantiate and initialize
-                convertView = mInflater.inflate(R.layout.image_list_row, null);
-                holder = new ViewHolder();
-                holder.imageView = (ImageView) convertView.findViewById(R.id.recyclingImageView);
-                convertView.setTag(holder);
-//                imageView = new RecyclingImageView(mContext);
+                imageView = new RecyclingImageView(mContext);
             } else { // Otherwise re-use the converted view
-                holder = (ViewHolder) convertView.getTag();
-//                imageView = (ImageView) convertView;
+                imageView = (ImageView) convertView;
             }
 
             // set image to list item
-            mImageFetcher.loadImage(images[position], holder.imageView);
+            mImageFetcher.loadImage(images.get(position), imageView);
 
-            return convertView;
+            return imageView;
         }
 
 
