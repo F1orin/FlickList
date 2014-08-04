@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.util;
+package ua.com.florin.flicklist.acomplete.util;
 
 import android.os.Build;
 

@@ -12,8 +12,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name">
+            android:name=".acomplete.activity.FlickListActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,6 +34,9 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activity.EndlessFlickrActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".acomplete.activity.MainActivity"
             android:label="@string/app_name" />
     </application>
 

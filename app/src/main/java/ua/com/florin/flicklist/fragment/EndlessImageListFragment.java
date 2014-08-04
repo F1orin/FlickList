@@ -22,8 +22,8 @@ import java.util.List;
 
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.util.EndlessScrollListener;
-import ua.com.florin.flicklist.util.ImageCache;
-import ua.com.florin.flicklist.util.ImageFetcher;
+import ua.com.florin.flicklist.acomplete.util.ImageCache;
+import ua.com.florin.flicklist.acomplete.util.ImageFetcher;
 import ua.com.florin.flicklist.util.MyConst;
 import ua.com.florin.flicklist.view.RecyclingImageView;
 
@@ -89,7 +89,7 @@ public class EndlessImageListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_image_list, container, false);
-        final ListView mListView = (ListView) view.findViewById(R.id.listView);
+        final ListView mListView = (ListView) view.findViewById(R.id.imageListView);
         mListView.setAdapter(mAdapter);
 
         EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {

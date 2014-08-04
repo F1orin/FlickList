@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.util;
+package ua.com.florin.flicklist.acomplete.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,9 +20,10 @@ import java.net.URL;
 
 import ua.com.florin.flicklist.BuildConfig;
 import ua.com.florin.flicklist.R;
+import ua.com.florin.flicklist.util.DiskLruCache;
 
 /**
- * A simple subclass of {@link ImageResizer} that fetches and resizes images fetched from a URL.
+ * A simple subclass of {@link ua.com.florin.flicklist.acomplete.util.ImageResizer} that fetches and resizes images fetched from a URL.
  */
 public class ImageFetcher extends ImageResizer {
     private static final String TAG = "ImageFetcher";

@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.atask;
+package ua.com.florin.flicklist.async;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -23,7 +23,7 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
      */
     private static final String TAG = "LoadPhotoListTask";
 
-    public static final int PHOTOS_PER_PAGE = 10;
+    public static final int PHOTOS_PER_PAGE = 4;
 
     private int page;
     private Flickr mFlickr;
@@ -38,6 +38,7 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
         PhotosInterface photosInterface = mFlickr.getPhotosInterface();
         SearchParameters searchParameters = new SearchParameters();
         searchParameters.setTags(params[0]);
+        searchParameters.setText(params[0][0]);
         PhotoList photoList = null;
         try {
             photoList = photosInterface.search(searchParameters, PHOTOS_PER_PAGE, page);

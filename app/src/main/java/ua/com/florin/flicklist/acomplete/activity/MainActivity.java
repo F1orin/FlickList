@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.activity;
+package ua.com.florin.flicklist.acomplete.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.Button;
 
 import ua.com.florin.flicklist.R;
+import ua.com.florin.flicklist.activity.EndlessFlickrActivity;
+import ua.com.florin.flicklist.activity.EndlessImageListActivity;
+import ua.com.florin.flicklist.activity.EndlessListActivity;
+import ua.com.florin.flicklist.activity.FlickrTestActivity;
+import ua.com.florin.flicklist.activity.ImageListActivity;
 
 
 public class MainActivity extends Activity {
@@ -27,6 +32,7 @@ public class MainActivity extends Activity {
         Button flickrTestButton = (Button) findViewById(R.id.flickrTestButton);
         Button endlessImageListTestButton = (Button) findViewById(R.id.endlessImageListTestButton);
         Button endlessFlickrTestButton = (Button) findViewById(R.id.endlessFlickrTestButton);
+        Button flickListButton = (Button) findViewById(R.id.flickListButton);
 
         View.OnClickListener buttonListener = new View.OnClickListener() {
             @Override
@@ -52,6 +58,10 @@ public class MainActivity extends Activity {
                     case R.id.endlessFlickrTestButton:
                         intent = new Intent(MainActivity.this, EndlessFlickrActivity.class);
                         startActivity(intent);
+                        return;
+                    case R.id.flickListButton:
+                        intent = new Intent(MainActivity.this, FlickListActivity.class);
+                        startActivity(intent);
 //                        return;
                 }
             }
@@ -61,5 +71,6 @@ public class MainActivity extends Activity {
         flickrTestButton.setOnClickListener(buttonListener);
         endlessImageListTestButton.setOnClickListener(buttonListener);
         endlessFlickrTestButton.setOnClickListener(buttonListener);
+        flickListButton.setOnClickListener(buttonListener);
     }
 }

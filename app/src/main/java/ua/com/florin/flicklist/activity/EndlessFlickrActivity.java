@@ -20,7 +20,7 @@ public class EndlessFlickrActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_list);
+        setContentView(R.layout.activity_endless_flickr);
 
         if (getFragmentManager().findFragmentByTag(TAG) == null) {
             final FragmentTransaction fragmentTransaction =

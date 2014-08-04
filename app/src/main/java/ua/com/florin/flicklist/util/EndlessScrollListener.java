@@ -47,10 +47,10 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
-        Log.d(TAG, "first: " + firstVisibleItem + ", visible: " + visibleItemCount + ", total: " + totalItemCount + ", loading: " + loading);
+//        Log.d(TAG, "first: " + firstVisibleItem + ", visible: " + visibleItemCount + ", total: " + totalItemCount + ", loading: " + loading);
 
         if (totalItemCount < previousTotalItemCount) {
-            Log.d(TAG, "First if - total: " + totalItemCount + " < prev:" + previousTotalItemCount);
+//            Log.d(TAG, "First if - total: " + totalItemCount + " < prev:" + previousTotalItemCount);
             this.currentPage = this.startingPageIndex;
             this.previousTotalItemCount = totalItemCount;
             if (totalItemCount == 0) {
@@ -62,7 +62,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
         if (loading && (totalItemCount > previousTotalItemCount)) {
-            Log.d(TAG, "Second if - load: " + loading + ", total: " + totalItemCount + " > prev: " + previousTotalItemCount);
+//            Log.d(TAG, "Second if - load: " + loading + ", total: " + totalItemCount + " > prev: " + previousTotalItemCount);
             loading = false;
             previousTotalItemCount = totalItemCount;
             currentPage++;
@@ -72,8 +72,8 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         // the visibleThreshold and need to reload more data.
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-            Log.d(TAG, "Third if - load: " + loading + ", total: " + totalItemCount + " - vis: " + visibleItemCount +
-                    " <= first: " + firstVisibleItem + " + visThr: " + visibleThreshold);
+//            Log.d(TAG, "Third if - load: " + loading + ", total: " + totalItemCount + " - vis: " + visibleItemCount +
+//                    " <= first: " + firstVisibleItem + " + visThr: " + visibleThreshold);
             onLoadMore(currentPage + 1, totalItemCount);
             loading = true;
         }

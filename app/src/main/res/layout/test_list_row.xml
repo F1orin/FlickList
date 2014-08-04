@@ -5,15 +5,15 @@
     android:layout_height="match_parent">
 
     <ProgressBar
+        android:id="@+id/imageLoadingProgressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <ua.com.florin.flicklist.view.RecyclingImageView
-        android:id="@+id/recyclingImageView"
+    <ImageView
+        android:id="@+id/flickrImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/image_view_desc" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

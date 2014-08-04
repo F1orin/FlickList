@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.util;
+package ua.com.florin.flicklist.acomplete.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -17,7 +17,7 @@ import ua.com.florin.flicklist.BuildConfig;
  * Google DisplayingBitmaps sample project
  * http://developer.android.com/training/displaying-bitmaps/index.html
  * <p/>
- * A simple subclass of {@link ImageWorker} that resizes images from resources given a target width
+ * A simple subclass of {@link ua.com.florin.flicklist.acomplete.util.ImageWorker} that resizes images from resources given a target width
  * and height. Useful for when the input images might be too large to simply load directly into
  * memory.
  */

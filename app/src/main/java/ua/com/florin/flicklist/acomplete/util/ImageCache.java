@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.util;
+package ua.com.florin.flicklist.acomplete.util;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
@@ -29,6 +29,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import ua.com.florin.flicklist.BuildConfig;
+import ua.com.florin.flicklist.util.DiskLruCache;
+import ua.com.florin.flicklist.util.RecyclingBitmapDrawable;
 
 /**
  * Kindly reused from
@@ -36,10 +38,10 @@ import ua.com.florin.flicklist.BuildConfig;
  * http://developer.android.com/training/displaying-bitmaps/index.html
  *
  *  This class handles disk and memory caching of bitmaps in conjunction with the
- * {@link ImageWorker} class and its subclasses. Use
+ * {@link ua.com.florin.flicklist.acomplete.util.ImageWorker} class and its subclasses. Use
  * {@link ImageCache#getInstance(FragmentManager, ImageCacheParams)} to get an instance of this
- * class, although usually a cache should be added directly to an {@link ImageWorker} by calling
- * {@link ImageWorker#addImageCache(FragmentManager, ImageCacheParams)}.
+ * class, although usually a cache should be added directly to an {@link ua.com.florin.flicklist.acomplete.util.ImageWorker} by calling
+ * {@link ua.com.florin.flicklist.acomplete.util.ImageWorker#addImageCache(FragmentManager, ImageCacheParams)}.
  */
 public class ImageCache {
     /**
@@ -467,7 +469,7 @@ public class ImageCache {
         /**
          * Create a set of image cache parameters that can be provided to
          * {@link ImageCache#getInstance(FragmentManager, ImageCacheParams)} or
-         * {@link ImageWorker#addImageCache(FragmentManager, ImageCacheParams)}.
+         * {@link ua.com.florin.flicklist.acomplete.util.ImageWorker#addImageCache(FragmentManager, ImageCacheParams)}.
          * @param context A context to use.
          * @param diskCacheDirectoryName A unique subdirectory name that will be appended to the
          *                               application cache directory. Usually "cache" or "images"

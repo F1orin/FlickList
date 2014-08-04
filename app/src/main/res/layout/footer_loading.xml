@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/flickrEndlessListView"
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/imagePackProgressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:dividerHeight="@dimen/list_divider_height" />
+        android:layout_gravity="center" />
 </LinearLayout>

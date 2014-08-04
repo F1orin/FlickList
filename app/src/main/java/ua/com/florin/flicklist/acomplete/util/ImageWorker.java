@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.util;
+package ua.com.florin.flicklist.acomplete.util;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import java.lang.ref.WeakReference;
 
 import ua.com.florin.flicklist.BuildConfig;
+import ua.com.florin.flicklist.util.RecyclingBitmapDrawable;
 
 /**
  * Kindly reused from

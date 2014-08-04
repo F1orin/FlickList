@@ -21,17 +21,14 @@ import com.googlecode.flickrjandroid.photos.Photo;
 import com.googlecode.flickrjandroid.photos.PhotoList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.atask.LoadPhotoListTask;
+import ua.com.florin.flicklist.async.LoadPhotoListTask;
 import ua.com.florin.flicklist.util.EndlessScrollListener;
-import ua.com.florin.flicklist.util.ImageCache;
-import ua.com.florin.flicklist.util.ImageFetcher;
-import ua.com.florin.flicklist.util.MyConst;
+import ua.com.florin.flicklist.acomplete.util.ImageCache;
+import ua.com.florin.flicklist.acomplete.util.ImageFetcher;
 import ua.com.florin.flicklist.view.RecyclingImageView;
 
 /**
@@ -45,13 +42,15 @@ public class EndlessFlickrTestFragment extends Fragment {
     private static final String TAG = "EndlessFlickrTestFragment";
     private static final String IMAGE_CACHE_DIR = "imgCache";
     private static final String FLICKR_API_KEY = "ba1b93db2b69a3fe588bfb775a600f36";
+    private static final String IMAGE_TAG = "Android";
 
     private int mImageSize;
     //reference to custom adapter for list filling
-    private ImageAdapter mAdapter;
+    private ua.com.florin.flicklist.adapter.ImageAdapter mAdapter;
     private ImageFetcher mImageFetcher;
     private List<String> mImageList;
     private Flickr mFlickr;
+
 
     /**
      * Necessary empty constructor
@@ -81,10 +80,7 @@ public class EndlessFlickrTestFragment extends Fragment {
         // cache.
         final int longest = (height > width ? height : width) / 2;
 
-        mImageList = loadImageList(1);
-
-        // initialize adapter
-        mAdapter = new ImageAdapter(getActivity(), mImageList);
+        mImageList = loadImageList(1, IMAGE_TAG);
 
         ImageCache.ImageCacheParams cacheParams =
                 new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
@@ -99,15 +95,20 @@ public class EndlessFlickrTestFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_image_list, container, false);
-        final ListView mListView = (ListView) view.findViewById(R.id.listView);
+        final View view = inflater.inflate(R.layout.fragment_endless_flickr_test, container, false);
+        final ListView mListView = (ListView) view.findViewById(R.id.flickrEndlessListView);
+        final View footerLayout = inflater.inflate(R.layout.footer_loading, null);
+
+        mListView.addFooterView(footerLayout);
+
+        mAdapter = new ua.com.florin.flicklist.adapter.ImageAdapter(getActivity(), mImageList, mImageFetcher);
         mListView.setAdapter(mAdapter);
 
         EndlessScrollListener endlessScrollListener = new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                List<String> urlsToAdd = loadImageList(page);
-                Log.d(TAG, "page:" + page + ", total:" + totalItemsCount);
+                List<String> urlsToAdd = loadImageList(page, IMAGE_TAG);
+//                Log.d(TAG, "page:" + page + ", total:" + totalItemsCount);
                 mImageList.addAll(urlsToAdd);
                 mAdapter.notifyDataSetChanged();
             }
@@ -155,11 +156,11 @@ public class EndlessFlickrTestFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private List<String> loadImageList(int page) {
+    private List<String> loadImageList(int page, String tag) {
         List<String> imageUrlList = new ArrayList<String>(LoadPhotoListTask.PHOTOS_PER_PAGE);
         LoadPhotoListTask loadPhotoListTask = new LoadPhotoListTask(mFlickr, page);
         // search tag parameters
-        String[] params = {"Nature"};
+        String[] params = {tag};
         loadPhotoListTask.execute(params);
         try {
             PhotoList photoList = loadPhotoListTask.get();
@@ -167,7 +168,7 @@ public class EndlessFlickrTestFragment extends Fragment {
                 // if list is not empty add all links to our url holder
                 for (Photo p : photoList) {
                     // here the size of image to be downloaded is defined
-                    imageUrlList.add(p.getLargeUrl());
+                    imageUrlList.add(p.getMedium640Url());
                 }
             }
         } catch (InterruptedException e) {

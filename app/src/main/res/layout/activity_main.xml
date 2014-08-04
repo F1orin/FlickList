@@ -38,4 +38,11 @@
         android:text="Endless Flickr Test"
         android:id="@+id/endlessFlickrTestButton"
         android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FlickList"
+        android:id="@+id/flickListButton"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

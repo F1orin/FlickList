@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.atask;
+package ua.com.florin.flicklist.acomplete.async;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
