@@ -14,12 +14,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.googlecode.flickrjandroid.Flickr;
-import com.googlecode.flickrjandroid.photos.Photo;
-import com.googlecode.flickrjandroid.photos.PhotoList;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.acomplete.adapter.FlickListAdapter;
@@ -29,6 +25,8 @@ import ua.com.florin.flicklist.acomplete.util.ImageFetcher;
 import ua.com.florin.flicklist.acomplete.util.MyConst;
 
 /**
+ * The main fragment that shows downloaded flickr photos
+ * <p/>
  * Created by florin on 03.08.14.
  */
 public class FlickListFragment extends Fragment {
@@ -38,17 +36,35 @@ public class FlickListFragment extends Fragment {
      */
     private static final String TAG = "FlickListFragment";
 
+    /**
+     * Name of the directory where to cache the photos
+     */
     private static final String IMAGE_CACHE_DIR = "imgCache";
+
+    /**
+     * Flickr API key
+     */
     private static final String FLICKR_API_KEY = "ba1b93db2b69a3fe588bfb775a600f36";
 
+    /**
+     * Array with the image tags to use in search parameters
+     */
     private String[] mImageTags;
-    //reference to custom adapter for list filling
-    private FlickListAdapter mAdapter;
-    //    private ImageAdapter mAdapter;
-    private ImageFetcher mImageFetcher;
-    private List<String> mImageList;
-    private Flickr mFlickr;
 
+    /**
+     * Custom adapter for list view filling
+     */
+    private FlickListAdapter mAdapter;
+
+    /**
+     * Image fetcher that is responsible for downloading images by URL
+     */
+    private ImageFetcher mImageFetcher;
+
+    /**
+     * Flickr instance to be used with Flickr API
+     */
+    private Flickr mFlickr;
 
     /**
      * Necessary empty constructor
@@ -59,9 +75,10 @@ public class FlickListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // notify that the fragment wants to add options in action bar
+        // notify that the fragment wants to add options into the action bar
         setHasOptionsMenu(true);
 
+        // init Flickr instance with appropriate key
         mFlickr = new Flickr(FLICKR_API_KEY);
 
         // Fetch screen height and width, to use as our max size when loading images as this
@@ -94,19 +111,21 @@ public class FlickListFragment extends Fragment {
         final ListView mListView = (ListView) view.findViewById(R.id.flickListListView);
         final View footerLayout = inflater.inflate(R.layout.footer_loading, null);
 
+        // get tags from bundle
         Bundle bundle = getArguments();
         if (bundle != null) {
             mImageTags = bundle.getStringArray(MyConst.IMAGE_TAGS_KEY);
             Log.d(TAG, mImageTags[0]);
         }
 
-        mImageList = new ArrayList<String>();
-
+        // footer view shows that new pack of photos is being loaded
         mListView.addFooterView(footerLayout);
 
-        mAdapter = new FlickListAdapter(getActivity(), mFlickr, mImageList, mImageFetcher, mImageTags);
+        mAdapter = new FlickListAdapter(getActivity(), mFlickr,
+                new ArrayList<String>(), mImageFetcher, mImageTags);
         mListView.setAdapter(mAdapter);
 
+        // load the first page of photos
         new LoadPhotoListTask(mFlickr, 1, mAdapter).execute(mImageTags);
 
         return view;

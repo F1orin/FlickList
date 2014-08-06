@@ -12,8 +12,15 @@ import android.view.MenuItem;
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.acomplete.fragment.FlickListFragment;
 import ua.com.florin.flicklist.acomplete.fragment.NavigationDrawerFragment;
+import ua.com.florin.flicklist.activity.ButtonsActivity;
 import ua.com.florin.flicklist.util.MyConst;
 
+/**
+ * Main activity of the application.
+ * Sets up a NavigationDrawer.
+ * Handles the clicks on NavigationDrawer's items
+ * and replaces the corresponding fragments.
+ */
 public class FlickListActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -35,10 +42,9 @@ public class FlickListActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_flicklist);
 
+        // initialize reference to NavigationDrawer
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -67,9 +73,10 @@ public class FlickListActivity extends Activity
                 bundle.putStringArray(MyConst.IMAGE_TAGS_KEY, MyConst.IMAGE_TAGS_SPACE);
                 break;
             case 3:
-                startActivity(new Intent(FlickListActivity.this, MainActivity.class));
+                startActivity(new Intent(FlickListActivity.this, ButtonsActivity.class));
                 return;
         }
+        // replace fragments
         Fragment fragment = new FlickListFragment();
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().

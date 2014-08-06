@@ -23,6 +23,10 @@ import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.util.DiskLruCache;
 
 /**
+ * Kindly reused from
+ * Google DisplayingBitmaps sample project
+ * http://developer.android.com/training/displaying-bitmaps/index.html
+ * <p/>
  * A simple subclass of {@link ua.com.florin.flicklist.acomplete.util.ImageResizer} that fetches and resizes images fetched from a URL.
  */
 public class ImageFetcher extends ImageResizer {
@@ -184,7 +188,8 @@ public class ImageFetcher extends ImageResizer {
             while (mHttpDiskCacheStarting) {
                 try {
                     mHttpDiskCacheLock.wait();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
             }
 
             if (mHttpDiskCache != null) {
@@ -218,7 +223,8 @@ public class ImageFetcher extends ImageResizer {
                     if (fileDescriptor == null && fileInputStream != null) {
                         try {
                             fileInputStream.close();
-                        } catch (IOException e) {}
+                        } catch (IOException e) {
+                        }
                     }
                 }
             }
@@ -232,7 +238,8 @@ public class ImageFetcher extends ImageResizer {
         if (fileInputStream != null) {
             try {
                 fileInputStream.close();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
         return bitmap;
     }
@@ -278,7 +285,8 @@ public class ImageFetcher extends ImageResizer {
                 if (in != null) {
                     in.close();
                 }
-            } catch (final IOException e) {}
+            } catch (final IOException e) {
+            }
         }
         return false;
     }

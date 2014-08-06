@@ -1,7 +1,6 @@
 package ua.com.florin.flicklist.acomplete.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,12 @@ import ua.com.florin.flicklist.acomplete.async.LoadPhotoListTask;
 import ua.com.florin.flicklist.acomplete.util.ImageFetcher;
 
 /**
+ * Custom adapter that holds image URLs and calls ImageFetcher method
+ * to load images to their views asynchronously.
+ * <p/>
+ * It is also responsible for loading new packs of images when
+ * the last view in adapter is shown on the screen.
+ * <p/>
  * Created by florin on 04.08.14.
  */
 public class FlickListAdapter extends BaseAdapter {
@@ -32,6 +37,9 @@ public class FlickListAdapter extends BaseAdapter {
     private final ImageFetcher mImageFetcher;
     private final String[] mImageTags;
 
+    /**
+     * Counter of pages to load the next when user scrolls to the bottom of the screen
+     */
     private int pageCounter = 2;
 
     public FlickListAdapter(Context context, Flickr flickr,
@@ -69,28 +77,39 @@ public class FlickListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        // if the last item is shown on the screen, load the next pack of photos
         if (position == getCount() - 1) {
-            Log.d(TAG, "Load new image page: " + pageCounter);
             new LoadPhotoListTask(mFlickr, pageCounter, this).execute(mImageTags);
             pageCounter++;
         }
 
+        ViewHolder viewHolder;
+        ImageView imageView;
         if (convertView == null) {
+            // inflate the new view
             convertView = LayoutInflater.from(mContext).inflate(R.layout.test_list_row, parent, false);
-
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.flickrImageView);
-
-            convertView.setTag(new ViewHolder(imageView));
+            imageView = (ImageView) convertView.findViewById(R.id.flickrImageView);
+            viewHolder = new ViewHolder(imageView);
+            convertView.setTag(viewHolder);
+        } else {
+            // get view from the existing view holder
+            viewHolder = (ViewHolder) convertView.getTag();
+            imageView = viewHolder.imageView;
         }
 
-        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-
-        mImageFetcher.loadImage(mImages.get(position), viewHolder.imageView);
+        mImageFetcher.loadImage(mImages.get(position), imageView);
 
         return convertView;
     }
 
+    /**
+     * A holder for implementing the ViewHolder pattern
+     */
     private static class ViewHolder {
+        /**
+         * Image view to be filled with downloaded from FLickr photo
+         */
         public final ImageView imageView;
 
         private ViewHolder(ImageView imageView) {

@@ -17,6 +17,9 @@ import java.io.IOException;
 import ua.com.florin.flicklist.acomplete.adapter.FlickListAdapter;
 
 /**
+ * A task that uses Flickr API to get photos urls based on search parameters,
+ * and adds them to adapter.
+ *
  * Created by florin on 30.07.14.
  */
 public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
@@ -26,6 +29,9 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
      */
     private static final String TAG = "LoadPhotoListTask";
 
+    /**
+     * Number of photos to be downloaded at a single call to Flickr API
+     */
     public static final int PHOTOS_PER_PAGE = 4;
 
     private int page;
@@ -64,6 +70,7 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
     protected void onPostExecute(PhotoList photos) {
         if (photos != null) {
             for (Photo photo : photos) {
+                // here the size of photo to be downloaded is determined by the method from Flickr API
                 mAdapter.add(photo.getLargeUrl());
             }
             mAdapter.notifyDataSetChanged();
