@@ -71,7 +71,7 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
         if (photos != null) {
             for (Photo photo : photos) {
                 // here the size of photo to be downloaded is determined by the method from Flickr API
-                mAdapter.add(photo.getLargeUrl());
+                mAdapter.add(photo.getMedium640Url());
             }
             mAdapter.notifyDataSetChanged();
         }

@@ -8,6 +8,5 @@
     <ListView
         android:id="@+id/flickrEndlessListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:dividerHeight="@dimen/list_divider_height" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

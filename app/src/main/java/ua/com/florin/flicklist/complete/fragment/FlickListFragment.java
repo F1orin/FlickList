@@ -93,7 +93,7 @@ public class FlickListFragment extends Fragment {
         // resolution that is appropriate for both portrait and landscape. For best image quality
         // we shouldn't divide by 2, but this will use more memory and require a larger memory
         // cache.
-        final int longest = (height > width ? height : width);
+        final int longest = (height > width ? height : width) / 2;
 
         ImageCache.ImageCacheParams cacheParams =
                 new ImageCache.ImageCacheParams(getActivity(), IMAGE_CACHE_DIR);
