@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.googlecode.flickrjandroid.Flickr;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.List;
 
@@ -36,6 +39,7 @@ public class FlickListAdapter extends BaseAdapter {
     private final List<String> mImages;
     private final ImageFetcher mImageFetcher;
     private final String[] mImageTags;
+    private ImageLoader imageLoader;
 
     /**
      * Counter of pages to load the next when user scrolls to the bottom of the screen
@@ -49,6 +53,20 @@ public class FlickListAdapter extends BaseAdapter {
         this.mImages = images;
         this.mImageFetcher = fetcher;
         this.mImageTags = tags;
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+//                .resetViewBeforeLoading(true)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+
+        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
+                .defaultDisplayImageOptions(options)
+                .build();
+
+        imageLoader = ImageLoader.getInstance();
+
+        imageLoader.init(configuration);
     }
 
     public boolean add(String s) {
@@ -98,7 +116,8 @@ public class FlickListAdapter extends BaseAdapter {
             imageView = viewHolder.imageView;
         }
 
-        mImageFetcher.loadImage(mImages.get(position), imageView);
+//        mImageFetcher.loadImage(mImages.get(position), imageView);
+        imageLoader.displayImage(mImages.get(position), imageView);
 
         return convertView;
     }

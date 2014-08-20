@@ -65,6 +65,7 @@
     <orderEntry type="library" exported="" name="flickrj-android-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="slf4j-android-1.6.1-RC1" level="project" />
+    <orderEntry type="library" exported="" name="universal-image-loader-1.9.2" level="project" />
   </component>
 </module>
 
