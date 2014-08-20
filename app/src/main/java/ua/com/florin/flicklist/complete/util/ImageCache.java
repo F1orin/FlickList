@@ -29,8 +29,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import ua.com.florin.flicklist.BuildConfig;
-import ua.com.florin.flicklist.workflow.util.DiskLruCache;
-import ua.com.florin.flicklist.workflow.util.RecyclingBitmapDrawable;
 
 /**
  * Kindly reused from

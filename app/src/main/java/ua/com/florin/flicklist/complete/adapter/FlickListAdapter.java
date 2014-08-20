@@ -88,7 +88,7 @@ public class FlickListAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             // inflate the new view
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.test_list_row, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.image_list_row, parent, false);
             imageView = (ImageView) convertView.findViewById(R.id.flickrImageView);
             viewHolder = new ViewHolder(imageView);
             convertView.setTag(viewHolder);

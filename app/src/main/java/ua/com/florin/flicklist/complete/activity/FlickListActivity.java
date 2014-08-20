@@ -3,7 +3,6 @@ package ua.com.florin.flicklist.complete.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -12,8 +11,7 @@ import android.view.MenuItem;
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.complete.fragment.FlickListFragment;
 import ua.com.florin.flicklist.complete.fragment.NavigationDrawerFragment;
-import ua.com.florin.flicklist.workflow.activity.ButtonsActivity;
-import ua.com.florin.flicklist.workflow.util.MyConst;
+import ua.com.florin.flicklist.complete.util.MyConst;
 
 /**
  * Main activity of the application.
@@ -72,9 +70,6 @@ public class FlickListActivity extends Activity
                 mTitle = getString(R.string.title_drawer2);
                 bundle.putStringArray(MyConst.IMAGE_TAGS_KEY, MyConst.IMAGE_TAGS_SPACE);
                 break;
-            case 3:
-                startActivity(new Intent(FlickListActivity.this, ButtonsActivity.class));
-                return;
         }
         // replace fragments
         Fragment fragment = new FlickListFragment();

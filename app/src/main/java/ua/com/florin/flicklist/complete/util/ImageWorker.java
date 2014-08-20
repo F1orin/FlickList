@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import java.lang.ref.WeakReference;
 
 import ua.com.florin.flicklist.BuildConfig;
-import ua.com.florin.flicklist.workflow.util.RecyclingBitmapDrawable;
 
 /**
  * Kindly reused from

@@ -20,7 +20,7 @@ import java.net.URL;
 
 import ua.com.florin.flicklist.BuildConfig;
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.workflow.util.DiskLruCache;
+import ua.com.florin.flicklist.complete.util.DiskLruCache;
 
 /**
  * Kindly reused from

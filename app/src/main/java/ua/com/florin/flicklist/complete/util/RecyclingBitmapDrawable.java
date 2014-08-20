@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.workflow.util;
+package ua.com.florin.flicklist.complete.util;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

@@ -105,7 +105,6 @@ public class NavigationDrawerFragment extends Fragment {
                 getString(R.string.title_drawer0),
                 getString(R.string.title_drawer1),
                 getString(R.string.title_drawer2),
-                getString(R.string.title_drawer3)
         };
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
