@@ -103,6 +103,7 @@ public class FlickListFragment extends Fragment {
         // The ImageFetcher loads images to ListView asynchronously
         mImageFetcher = new ImageFetcher(getActivity(), longest);
         mImageFetcher.addImageCache(getActivity().getFragmentManager(), cacheParams);
+        mImageFetcher.setLoadingImage(R.drawable.empty_photo);
     }
 
     @Override

@@ -116,8 +116,9 @@ public class FlickListAdapter extends BaseAdapter {
             imageView = viewHolder.imageView;
         }
 
-//        mImageFetcher.loadImage(mImages.get(position), imageView);
-        imageLoader.displayImage(mImages.get(position), imageView);
+        mImageFetcher.loadImage(mImages.get(position), imageView);
+//        imageLoader.displayImage(mImages.get(position), imageView);
+        //TODO try Picasso
 
         return convertView;
     }
