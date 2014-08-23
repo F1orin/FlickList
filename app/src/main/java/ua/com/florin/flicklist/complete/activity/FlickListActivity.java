@@ -3,7 +3,9 @@ package ua.com.florin.flicklist.complete.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,10 +39,17 @@ public class FlickListActivity extends Activity
      */
     private CharSequence mTitle;
 
+    /**
+     * Instance for persistent storing of app preferences
+     */
+    private SharedPreferences mPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flicklist);
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // initialize reference to NavigationDrawer
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -60,15 +69,15 @@ public class FlickListActivity extends Activity
         switch (position) {
             case 0:
                 mTitle = getString(R.string.title_drawer0);
-                bundle.putStringArray(MyConst.IMAGE_TAGS_KEY, MyConst.IMAGE_TAGS_FLOWERS);
+                bundle.putString(MyConst.IMAGE_TAG_KEY, MyConst.IMAGE_TAG_FLOWERS);
                 break;
             case 1:
                 mTitle = getString(R.string.title_drawer1);
-                bundle.putStringArray(MyConst.IMAGE_TAGS_KEY, MyConst.IMAGE_TAGS_NATURE);
+                bundle.putString(MyConst.IMAGE_TAG_KEY, MyConst.IMAGE_TAG_NATURE);
                 break;
             case 2:
                 mTitle = getString(R.string.title_drawer2);
-                bundle.putStringArray(MyConst.IMAGE_TAGS_KEY, MyConst.IMAGE_TAGS_SPACE);
+                bundle.putString(MyConst.IMAGE_TAG_KEY, MyConst.IMAGE_TAG_SPACE);
                 break;
         }
         // replace fragments

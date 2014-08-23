@@ -11,11 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <ImageView
+<!--    <ImageView
         android:id="@+id/flickrImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true" />-->
+
+    <ua.com.florin.flicklist.complete.view.DynamicImageView
+        android:id="@+id/flickrImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>

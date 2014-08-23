@@ -8,12 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.googlecode.flickrjandroid.Flickr;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.complete.async.LoadPhotoListTask;
 import ua.com.florin.flicklist.complete.util.ImageFetcher;
@@ -38,8 +38,7 @@ public class FlickListAdapter extends BaseAdapter {
     private final Flickr mFlickr;
     private final List<String> mImages;
     private final ImageFetcher mImageFetcher;
-    private final String[] mImageTags;
-    private ImageLoader imageLoader;
+    private final String mImageTag;
 
     /**
      * Counter of pages to load the next when user scrolls to the bottom of the screen
@@ -47,26 +46,12 @@ public class FlickListAdapter extends BaseAdapter {
     private int pageCounter = 2;
 
     public FlickListAdapter(Context context, Flickr flickr,
-                            List<String> images, ImageFetcher fetcher, String[] tags) {
+                            List<String> images, ImageFetcher fetcher, String tag) {
         this.mContext = context;
         this.mFlickr = flickr;
         this.mImages = images;
         this.mImageFetcher = fetcher;
-        this.mImageTags = tags;
-
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-//                .resetViewBeforeLoading(true)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .build();
-
-        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(context)
-                .defaultDisplayImageOptions(options)
-                .build();
-
-        imageLoader = ImageLoader.getInstance();
-
-        imageLoader.init(configuration);
+        this.mImageTag = tag;
     }
 
     public boolean add(String s) {
@@ -98,27 +83,23 @@ public class FlickListAdapter extends BaseAdapter {
 
         // if the last item is shown on the screen, load the next pack of photos
         if (position == getCount() - 1) {
-            new LoadPhotoListTask(mFlickr, pageCounter, this).execute(mImageTags);
+            new LoadPhotoListTask(mFlickr, pageCounter, this).execute(mImageTag);
             pageCounter++;
         }
 
-        ViewHolder viewHolder;
-        ImageView imageView;
-        if (convertView == null) {
-            // inflate the new view
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.image_list_row, parent, false);
-            imageView = (ImageView) convertView.findViewById(R.id.flickrImageView);
-            viewHolder = new ViewHolder(imageView);
-            convertView.setTag(viewHolder);
+        ViewHolder holder;
+        if (convertView != null) {
+            holder = (ViewHolder) convertView.getTag();
         } else {
-            // get view from the existing view holder
-            viewHolder = (ViewHolder) convertView.getTag();
-            imageView = viewHolder.imageView;
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.image_list_row, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
         }
+        ImageView imageView = holder.imageView;
 
-        mImageFetcher.loadImage(mImages.get(position), imageView);
-//        imageLoader.displayImage(mImages.get(position), imageView);
-        //TODO try Picasso
+//        mImageFetcher.loadImage(mImages.get(position), imageView);
+        Picasso.with(mContext).setIndicatorsEnabled(true);
+        Picasso.with(mContext).load(mImages.get(position)).placeholder(R.drawable.empty_photo).into(imageView);
 
         return convertView;
     }
@@ -126,14 +107,14 @@ public class FlickListAdapter extends BaseAdapter {
     /**
      * A holder for implementing the ViewHolder pattern
      */
-    private static class ViewHolder {
+    static class ViewHolder {
         /**
          * Image view to be filled with downloaded from FLickr photo
          */
-        public final ImageView imageView;
+        @InjectView(R.id.flickrImageView) ImageView imageView;
 
-        private ViewHolder(ImageView imageView) {
-            this.imageView = imageView;
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
         }
     }
 }
