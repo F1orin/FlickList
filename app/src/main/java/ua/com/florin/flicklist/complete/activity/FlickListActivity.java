@@ -1,18 +1,20 @@
 package ua.com.florin.flicklist.complete.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.complete.fragment.FlickListFragment;
-import ua.com.florin.flicklist.complete.fragment.NavigationDrawerFragment;
 import ua.com.florin.flicklist.complete.util.MyConst;
 
 /**
@@ -21,8 +23,7 @@ import ua.com.florin.flicklist.complete.util.MyConst;
  * Handles the clicks on NavigationDrawer's items
  * and replaces the corresponding fragments.
  */
-public class FlickListActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class FlickListActivity extends Activity {
 
     /**
      * Logging tag constant
@@ -30,19 +31,11 @@ public class FlickListActivity extends Activity
     private static final String TAG = "FlickListActivity";
 
     /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-
-    /**
      * Instance for persistent storing of app preferences
      */
     private SharedPreferences mPreferences;
+
+    private String[] mDefaultCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,60 +44,42 @@ public class FlickListActivity extends Activity
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // initialize reference to NavigationDrawer
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        mDefaultCategories = getResources().getStringArray(R.array.default_categories);
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
+        Spinner categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.default_categories, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        categorySpinner.setAdapter(spinnerAdapter);
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        Bundle bundle = new Bundle();
-        switch (position) {
-            case 0:
-                mTitle = getString(R.string.title_drawer0);
-                bundle.putString(MyConst.IMAGE_TAG_KEY, MyConst.IMAGE_TAG_FLOWERS);
-                break;
-            case 1:
-                mTitle = getString(R.string.title_drawer1);
-                bundle.putString(MyConst.IMAGE_TAG_KEY, MyConst.IMAGE_TAG_NATURE);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_drawer2);
-                bundle.putString(MyConst.IMAGE_TAG_KEY, MyConst.IMAGE_TAG_SPACE);
-                break;
-        }
-        // replace fragments
-        Fragment fragment = new FlickListFragment();
-        fragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().
-                replace(R.id.container, fragment)
-                .commit();
-    }
+        AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // define the selected category
+                String selectedCategory = (String) parent.getItemAtPosition(position);
+                Bundle bundle = new Bundle();
+                bundle.putString(MyConst.IMAGE_TAG_KEY, selectedCategory);
+                // replace fragments
+                Fragment fragment = new FlickListFragment();
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().
+                        replace(R.id.container, fragment)
+                        .commit();
+            }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+        categorySpinner.setOnItemSelectedListener(spinnerListener);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.global, menu);
-            restoreActionBar();
-            return true;
-        }
+        getMenuInflater().inflate(R.menu.global, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
