@@ -74,8 +74,6 @@ public class FlickListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // notify that the fragment wants to add options into the action bar
-        setHasOptionsMenu(true);
 
         // init Flickr instance with appropriate key
         mFlickr = new Flickr(FLICKR_API_KEY);
@@ -154,18 +152,10 @@ public class FlickListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.flicklist_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.clear_cache:
-                mImageFetcher.clearCache();
-                Toast.makeText(getActivity(), R.string.clear_cache_complete_toast,
-                        Toast.LENGTH_SHORT).show();
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 }

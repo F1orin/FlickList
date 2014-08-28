@@ -2,9 +2,9 @@
 <resources>
 
     <string-array name="default_categories">
-        <item>Flowers</item>
         <item>Nature</item>
         <item>Space</item>
+        <item>Flowers</item>
     </string-array>
 
 </resources>
