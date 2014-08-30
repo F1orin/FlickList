@@ -7,3 +7,4 @@ Used libraries:
 - flickrj-android
 - slf4j-android
 - butterknife
+- picasso
