@@ -37,6 +37,8 @@ public class FlickListActivity extends Activity {
     @InjectView(R.id.categorySpinner)
     Spinner mCategorySpinner;
 
+    //TODO create new fragment with grid and maximizing to pager. Grid size is defined in settings.
+
     /**
      * Logging tag constant
      */
