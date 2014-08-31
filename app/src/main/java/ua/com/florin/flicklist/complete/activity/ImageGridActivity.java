@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.complete.fragment.FlickListFragment;
+import ua.com.florin.flicklist.complete.fragment.ImageGridFragment;
 import ua.com.florin.flicklist.complete.util.MyConst;
 
 /**
@@ -33,16 +34,14 @@ import ua.com.florin.flicklist.complete.util.MyConst;
  * Handles the clicks on NavigationDrawer's items
  * and replaces the corresponding fragments.
  */
-public class FlickListActivity extends Activity {
+public class ImageGridActivity extends Activity {
     @InjectView(R.id.categorySpinner)
     Spinner mCategorySpinner;
-
-    //TODO create new fragment with grid and maximizing to pager. Grid size is defined in settings.
 
     /**
      * Logging tag constant
      */
-    private static final String TAG = "FlickListActivity";
+    private static final String TAG = "ImageGridActivity";
 
     /**
      * An adapter that is used in spinner with categories
@@ -129,7 +128,7 @@ public class FlickListActivity extends Activity {
         Bundle bundle = new Bundle();
         bundle.putString(MyConst.IMAGE_TAG_KEY, category);
         // replace fragments
-        Fragment fragment = new FlickListFragment();
+        Fragment fragment = new ImageGridFragment();
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().
                 replace(R.id.container, fragment)
