@@ -98,7 +98,6 @@ public class FlickListAdapter extends BaseAdapter {
         ImageView imageView = holder.imageView;
 
 //        mImageFetcher.loadImage(mImages.get(position), imageView);
-        Picasso.with(mContext).setIndicatorsEnabled(true);
         Picasso.with(mContext).load(mImages.get(position)).placeholder(R.drawable.empty_photo).into(imageView);
 
         return convertView;

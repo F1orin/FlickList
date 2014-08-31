@@ -7,11 +7,9 @@ package ua.com.florin.flicklist.complete.util;
  */
 public class MyConst {
 
-    public static final String IMAGE_TAG_KEY = "image_tags_key";
+    public static final String IMAGE_TAG_KEY = "image_tag_key";
 
-    public static final String IMAGE_TAG_FLOWERS = "Flowers";
-    public static final String IMAGE_TAG_NATURE = "Nature";
-    public static final String IMAGE_TAG_SPACE = "Space";
+    public static final String CATEGORY_PREF_NAME = "image_categories";
+    public static final String CATEGORY_ARRAY_NAME = "category";
 
-    public static final String IMAGE_CATEGORY_SET_KEY = "img_cat_set_key";
 }
