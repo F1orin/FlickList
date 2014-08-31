@@ -3,7 +3,6 @@ package ua.com.florin.flicklist.complete.fragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,9 +46,9 @@ public class FlickListFragment extends Fragment {
     private static final String FLICKR_API_KEY = "ba1b93db2b69a3fe588bfb775a600f36";
 
     /**
-     * Array with the image tags to use in search parameters
+     * Image tag for use in search parameters
      */
-    private String[] mImageTags;
+    private String mImageTag;
 
     /**
      * Custom adapter for list view filling
@@ -75,8 +74,6 @@ public class FlickListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // notify that the fragment wants to add options into the action bar
-        setHasOptionsMenu(true);
 
         // init Flickr instance with appropriate key
         mFlickr = new Flickr(FLICKR_API_KEY);
@@ -103,6 +100,7 @@ public class FlickListFragment extends Fragment {
         // The ImageFetcher loads images to ListView asynchronously
         mImageFetcher = new ImageFetcher(getActivity(), longest);
         mImageFetcher.addImageCache(getActivity().getFragmentManager(), cacheParams);
+        mImageFetcher.setLoadingImage(R.drawable.empty_photo);
     }
 
     @Override
@@ -111,22 +109,21 @@ public class FlickListFragment extends Fragment {
         final ListView mListView = (ListView) view.findViewById(R.id.flickListListView);
         final View footerLayout = inflater.inflate(R.layout.footer_loading, null);
 
-        // get tags from bundle
+        // get tag from bundle
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mImageTags = bundle.getStringArray(MyConst.IMAGE_TAGS_KEY);
-            Log.d(TAG, mImageTags[0]);
+            mImageTag = bundle.getString(MyConst.IMAGE_TAG_KEY);
         }
 
         // footer view shows that new pack of photos is being loaded
         mListView.addFooterView(footerLayout);
 
         mAdapter = new FlickListAdapter(getActivity(), mFlickr,
-                new ArrayList<String>(), mImageFetcher, mImageTags);
+                new ArrayList<String>(), mImageFetcher, mImageTag);
         mListView.setAdapter(mAdapter);
 
         // load the first page of photos
-        new LoadPhotoListTask(mFlickr, 1, mAdapter).execute(mImageTags);
+        new LoadPhotoListTask(mFlickr, 1, mAdapter).execute(mImageTag);
 
         return view;
     }
@@ -154,18 +151,11 @@ public class FlickListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.flicklist_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.clear_cache:
-                mImageFetcher.clearCache();
-                Toast.makeText(getActivity(), R.string.clear_cache_complete_toast,
-                        Toast.LENGTH_SHORT).show();
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 }

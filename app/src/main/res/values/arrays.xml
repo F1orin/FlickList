@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="drawer_items">
-        <item>Flowers</item>
+
+    <string-array name="default_categories">
         <item>Nature</item>
         <item>Space</item>
+        <item>Flowers</item>
     </string-array>
+
 </resources>

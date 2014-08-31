@@ -22,7 +22,7 @@ import ua.com.florin.flicklist.complete.adapter.FlickListAdapter;
  *
  * Created by florin on 30.07.14.
  */
-public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
+public class LoadPhotoListTask extends AsyncTask<String, Void, PhotoList> {
 
     /**
      * Logging tag constant
@@ -33,6 +33,11 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
      * Number of photos to be downloaded at a single call to Flickr API
      */
     public static final int PHOTOS_PER_PAGE = 4;
+
+    /**
+     * A search parameter constant representing photo media type
+     */
+    public static final String MEDIA_TYPE_PHOTOS = "photos";
 
     private int page;
     private Flickr mFlickr;
@@ -45,13 +50,16 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
     }
 
     @Override
-    protected PhotoList doInBackground(String[]... params) {
-        PhotosInterface photosInterface = mFlickr.getPhotosInterface();
-        SearchParameters searchParameters = new SearchParameters();
-        searchParameters.setTags(params[0]);
-        searchParameters.setText(params[0][0]);
+    protected PhotoList doInBackground(String... params) {
         PhotoList photoList = null;
         try {
+            // build parameters for search request
+            SearchParameters searchParameters = new SearchParameters();
+            // searchParameters.setTags(params[0]);
+            searchParameters.setMedia(MEDIA_TYPE_PHOTOS);
+            searchParameters.setText(params[0]);
+            // perform search request
+            PhotosInterface photosInterface = mFlickr.getPhotosInterface();
             photoList = photosInterface.search(searchParameters, PHOTOS_PER_PAGE, page);
         } catch (IOException e) {
             Log.e(TAG, "IOException");
@@ -71,7 +79,7 @@ public class LoadPhotoListTask extends AsyncTask<String[], Void, PhotoList> {
         if (photos != null) {
             for (Photo photo : photos) {
                 // here the size of photo to be downloaded is determined by the method from Flickr API
-                mAdapter.add(photo.getMedium640Url());
+                mAdapter.add(photo.getLargeUrl());
             }
             mAdapter.notifyDataSetChanged();
         }
