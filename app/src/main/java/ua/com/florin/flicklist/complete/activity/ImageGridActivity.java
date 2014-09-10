@@ -24,7 +24,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.complete.fragment.FlickListFragment;
 import ua.com.florin.flicklist.complete.fragment.ImageGridFragment;
 import ua.com.florin.flicklist.complete.util.MyConst;
 
@@ -56,7 +55,7 @@ public class ImageGridActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flicklist);
+        setContentView(R.layout.activity_image_grid);
         ButterKnife.inject(this);
 
         // get categories from preferences

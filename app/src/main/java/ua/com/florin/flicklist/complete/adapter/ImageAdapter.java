@@ -13,7 +13,7 @@ import com.koushikdutta.ion.Ion;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.complete.async.NewLoadPhotoListTask;
+import ua.com.florin.flicklist.complete.async.LoadPhotoListTask;
 import ua.com.florin.flicklist.complete.view.SquaredImageView;
 
 /**
@@ -59,7 +59,7 @@ public class ImageAdapter extends ArrayAdapter<String> {
 
         // if the last item is shown on the screen, load the next pack of photos
         if (position > getCount() - 4) {
-            new NewLoadPhotoListTask(mFlickr, pageCounter, this).execute(mSearchRequest);
+            new LoadPhotoListTask(mFlickr, pageCounter, this).execute(mSearchRequest);
             pageCounter++;
         }
 

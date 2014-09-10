@@ -1,18 +1,20 @@
 package ua.com.florin.flicklist.complete.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.googlecode.flickrjandroid.Flickr;
 
 import ua.com.florin.flicklist.R;
+import ua.com.florin.flicklist.complete.activity.ImageDetailActivity;
 import ua.com.florin.flicklist.complete.adapter.ImageAdapter;
-import ua.com.florin.flicklist.complete.async.NewLoadPhotoListTask;
+import ua.com.florin.flicklist.complete.async.LoadPhotoListTask;
 import ua.com.florin.flicklist.complete.util.MyConst;
 
 /**
@@ -59,9 +61,8 @@ public class ImageGridFragment extends Fragment {
         mFlickr = new Flickr(FLICKR_API_KEY);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // inflate tha layout of the fragment
         final View view = inflater.inflate(R.layout.fragment_image_grid, container, false);
 
@@ -70,6 +71,17 @@ public class ImageGridFragment extends Fragment {
         int cols = getResources().getDisplayMetrics().widthPixels /
                 getResources().getDisplayMetrics().densityDpi;
         gridView.setNumColumns(cols);
+
+        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Intent intent = new Intent(getActivity(), ImageDetailActivity.class);
+                intent.putExtra(MyConst.EXTRA_IMAGE_POSITION, position);
+                intent.putExtra(MyConst.EXTRA_IMAGE_URL_ARRAY, getImageAdapterElements());
+                startActivity(intent);
+            }
+        };
+        gridView.setOnItemClickListener(itemClickListener);
 
         // get tag from bundle
         Bundle bundle = getArguments();
@@ -82,8 +94,17 @@ public class ImageGridFragment extends Fragment {
         gridView.setAdapter(mAdapter);
 
         // load the first page of photos
-        new NewLoadPhotoListTask(mFlickr, 1, mAdapter).execute(mSearchRequest);
+        new LoadPhotoListTask(mFlickr, 1, mAdapter).execute(mSearchRequest);
 
         return view;
+    }
+
+    private String[] getImageAdapterElements() {
+        int size = mAdapter.getCount();
+        String[] elements = new String[size];
+        for (int i = 0; i < size; i++) {
+            elements[i] = mAdapter.getItem(i);
+        }
+        return elements;
     }
 }
