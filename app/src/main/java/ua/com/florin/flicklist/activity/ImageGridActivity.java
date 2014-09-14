@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.activity;
+package ua.com.florin.flicklist.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,8 +24,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.complete.fragment.FlickListFragment;
-import ua.com.florin.flicklist.complete.util.MyConst;
+import ua.com.florin.flicklist.fragment.ImageGridFragment;
+import ua.com.florin.flicklist.util.MyConst;
 
 /**
  * Main activity of the application.
@@ -33,16 +33,14 @@ import ua.com.florin.flicklist.complete.util.MyConst;
  * Handles the clicks on NavigationDrawer's items
  * and replaces the corresponding fragments.
  */
-public class FlickListActivity extends Activity {
+public class ImageGridActivity extends Activity {
     @InjectView(R.id.categorySpinner)
     Spinner mCategorySpinner;
-
-    //TODO create new fragment with grid and maximizing to pager. Grid size is defined in settings.
 
     /**
      * Logging tag constant
      */
-    private static final String TAG = "FlickListActivity";
+    private static final String TAG = "ImageGridActivity";
 
     /**
      * An adapter that is used in spinner with categories
@@ -57,7 +55,7 @@ public class FlickListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flicklist);
+        setContentView(R.layout.activity_image_grid);
         ButterKnife.inject(this);
 
         // get categories from preferences
@@ -129,7 +127,7 @@ public class FlickListActivity extends Activity {
         Bundle bundle = new Bundle();
         bundle.putString(MyConst.IMAGE_TAG_KEY, category);
         // replace fragments
-        Fragment fragment = new FlickListFragment();
+        Fragment fragment = new ImageGridFragment();
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction().
                 replace(R.id.container, fragment)

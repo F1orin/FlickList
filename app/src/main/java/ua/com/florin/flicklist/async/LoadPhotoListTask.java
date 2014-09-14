@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.async;
+package ua.com.florin.flicklist.async;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -14,7 +14,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import ua.com.florin.flicklist.complete.adapter.FlickListAdapter;
+import ua.com.florin.flicklist.adapter.ImageAdapter;
 
 /**
  * A task that uses Flickr API to get photos urls based on search parameters,
@@ -32,7 +32,7 @@ public class LoadPhotoListTask extends AsyncTask<String, Void, PhotoList> {
     /**
      * Number of photos to be downloaded at a single call to Flickr API
      */
-    public static final int PHOTOS_PER_PAGE = 4;
+    public static final int PHOTOS_PER_PAGE = 6;
 
     /**
      * A search parameter constant representing photo media type
@@ -41,9 +41,9 @@ public class LoadPhotoListTask extends AsyncTask<String, Void, PhotoList> {
 
     private int page;
     private Flickr mFlickr;
-    private FlickListAdapter mAdapter;
+    private ImageAdapter mAdapter;
 
-    public LoadPhotoListTask(Flickr flickr, int page, FlickListAdapter adapter) {
+    public LoadPhotoListTask(Flickr flickr, int page, ImageAdapter adapter) {
         this.mFlickr = flickr;
         this.page = page;
         this.mAdapter = adapter;
@@ -81,7 +81,7 @@ public class LoadPhotoListTask extends AsyncTask<String, Void, PhotoList> {
                 // here the size of photo to be downloaded is determined by the method from Flickr API
                 mAdapter.add(photo.getLargeUrl());
             }
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();
         }
     }
 }

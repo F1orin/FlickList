@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.util;
+package ua.com.florin.flicklist.util;
 
 /**
  * Auxiliary class with application constants
@@ -11,5 +11,9 @@ public class MyConst {
 
     public static final String CATEGORY_PREF_NAME = "image_categories";
     public static final String CATEGORY_ARRAY_NAME = "category";
+
+    public static final String EXTRA_IMAGE_POSITION = "extra_image";
+    public static final String EXTRA_IMAGE_URL = "extra_image_url";
+    public static final String EXTRA_IMAGE_URL_ARRAY = "extra_image_url_array";
 
 }
