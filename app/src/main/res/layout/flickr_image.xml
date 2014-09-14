@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
-    <ua.com.florin.flicklist.complete.view.SquaredImageView
+    <ua.com.florin.flicklist.view.SquaredImageView
         android:id="@+id/flickrSquaredImageView"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"

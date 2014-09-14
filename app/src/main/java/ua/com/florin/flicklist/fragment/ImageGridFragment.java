@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.fragment;
+package ua.com.florin.flicklist.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -12,10 +12,10 @@ import android.widget.GridView;
 import com.googlecode.flickrjandroid.Flickr;
 
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.complete.activity.ImageDetailActivity;
-import ua.com.florin.flicklist.complete.adapter.ImageAdapter;
-import ua.com.florin.flicklist.complete.async.LoadPhotoListTask;
-import ua.com.florin.flicklist.complete.util.MyConst;
+import ua.com.florin.flicklist.activity.ImageDetailActivity;
+import ua.com.florin.flicklist.adapter.ImageAdapter;
+import ua.com.florin.flicklist.async.LoadPhotoListTask;
+import ua.com.florin.flicklist.util.MyConst;
 
 /**
  * Created by Florin Bicher on 31.08.14.

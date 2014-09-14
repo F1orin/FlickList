@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.adapter;
+package ua.com.florin.flicklist.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,8 +13,8 @@ import com.koushikdutta.ion.Ion;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.complete.async.LoadPhotoListTask;
-import ua.com.florin.flicklist.complete.view.SquaredImageView;
+import ua.com.florin.flicklist.async.LoadPhotoListTask;
+import ua.com.florin.flicklist.view.SquaredImageView;
 
 /**
  * Created by Florin Bicher on 31.08.14.

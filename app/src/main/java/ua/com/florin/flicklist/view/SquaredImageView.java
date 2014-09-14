@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.view;
+package ua.com.florin.flicklist.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

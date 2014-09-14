@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.fragment;
+package ua.com.florin.flicklist.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.koushikdutta.ion.Ion;
 
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.complete.util.MyConst;
+import ua.com.florin.flicklist.util.MyConst;
 
 /**
  * Created by Florin Bicher on 09.09.14.

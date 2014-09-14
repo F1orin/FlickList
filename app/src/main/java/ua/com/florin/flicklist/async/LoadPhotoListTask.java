@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.async;
+package ua.com.florin.flicklist.async;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -14,7 +14,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import ua.com.florin.flicklist.complete.adapter.ImageAdapter;
+import ua.com.florin.flicklist.adapter.ImageAdapter;
 
 /**
  * A task that uses Flickr API to get photos urls based on search parameters,

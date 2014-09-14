@@ -1,4 +1,4 @@
-package ua.com.florin.flicklist.complete.activity;
+package ua.com.florin.flicklist.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,8 +24,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ua.com.florin.flicklist.R;
-import ua.com.florin.flicklist.complete.fragment.ImageGridFragment;
-import ua.com.florin.flicklist.complete.util.MyConst;
+import ua.com.florin.flicklist.fragment.ImageGridFragment;
+import ua.com.florin.flicklist.util.MyConst;
 
 /**
  * Main activity of the application.
