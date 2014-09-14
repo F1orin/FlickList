@@ -3,7 +3,10 @@ FlickList
 
 *An android application for browsing flickr photos*
 
-![Test text](/app/src/main/flicklist_screenshot.png "opt text")
+![Screenshot](/app/src/main/flicklist_screenshot.png)
+
+#### Download
+- [FlickList.apk](https://www.dropbox.com/s/76pqqvmlni8nj5c/flicklist-release.apk?dl=0)
 
 #### Used libraries:
 - [flickrj-android](https://code.google.com/p/flickrj-android/)
