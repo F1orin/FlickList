@@ -13,7 +13,7 @@ The main point of the application for now is to get aesthetic pleasure from brow
 
 #### Future Features
 - Sharing a photo
-- Saving a photo to the device filesystem
+- Saving a photo to the device
 - Authorization with Flickr account
 
 #### Download
