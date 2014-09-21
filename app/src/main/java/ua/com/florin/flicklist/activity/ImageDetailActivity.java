@@ -31,7 +31,11 @@ public class ImageDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pager_image_detail);
 
-        mImageUrls = getIntent().getExtras().getStringArray(MyConst.EXTRA_IMAGE_URL_ARRAY);
+        // set the image URLs array
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mImageUrls = getIntent().getExtras().getStringArray(MyConst.EXTRA_IMAGE_URL_ARRAY);
+        }
 
         mPagerAdapter = new ImagePagerAdapter(getSupportFragmentManager(), mImageUrls.length);
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -42,9 +46,11 @@ public class ImageDetailActivity extends FragmentActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Set the current item based on the extra passed in to this activity
-        final int extraCurrentItem = getIntent().getIntExtra(MyConst.EXTRA_IMAGE_POSITION, -1);
-        if (extraCurrentItem != -1) {
-            mPager.setCurrentItem(extraCurrentItem);
+        if (extras != null) {
+            final int extraCurrentItem = getIntent().getIntExtra(MyConst.EXTRA_IMAGE_POSITION, -1);
+            if (extraCurrentItem != -1) {
+                mPager.setCurrentItem(extraCurrentItem);
+            }
         }
     }
 

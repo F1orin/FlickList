@@ -13,6 +13,8 @@ import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.util.MyConst;
 
 /**
+ * A fragment that fills every page in the ViewPager of the detailed photo view.
+ *
  * Created by Florin Bicher on 09.09.14.
  */
 public class ImageDetailFragment extends Fragment {

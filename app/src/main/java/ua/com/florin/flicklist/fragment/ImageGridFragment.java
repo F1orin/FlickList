@@ -1,8 +1,9 @@
 package ua.com.florin.flicklist.fragment;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ import ua.com.florin.flicklist.async.LoadPhotoListTask;
 import ua.com.florin.flicklist.util.MyConst;
 
 /**
+ * A fragment that fills the container of the main application's activity
+ * and shows the grid of the loaded photos.
+ * <p/>
  * Created by Florin Bicher on 31.08.14.
  */
 public class ImageGridFragment extends Fragment {
@@ -53,6 +57,31 @@ public class ImageGridFragment extends Fragment {
     public ImageGridFragment() {
     }
 
+    /**
+     * Creates new instance of {@link ua.com.florin.flicklist.fragment.ImageGridFragment}
+     * for the given search request
+     *
+     * @param searchRequest a search request for image category
+     * @return newly created fragment
+     */
+    public static ImageGridFragment newInstance(String searchRequest) {
+        ImageGridFragment fragment = new ImageGridFragment();
+        Bundle b = new Bundle();
+        b.putString(MyConst.IMAGE_TAG_KEY, searchRequest);
+        fragment.setArguments(b);
+        return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // get tag from bundle
+        if (getArguments() != null) {
+            mSearchRequest = getArguments().getString(MyConst.IMAGE_TAG_KEY);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,12 +111,6 @@ public class ImageGridFragment extends Fragment {
             }
         };
         gridView.setOnItemClickListener(itemClickListener);
-
-        // get tag from bundle
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mSearchRequest = bundle.getString(MyConst.IMAGE_TAG_KEY);
-        }
 
         // create the adapter and set it to grid view
         mAdapter = new ImageAdapter(getActivity(), mFlickr, mSearchRequest);
