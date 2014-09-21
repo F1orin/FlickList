@@ -55,7 +55,8 @@ public class LoadPhotoListTask extends AsyncTask<String, Void, PhotoList> {
         try {
             // build parameters for search request
             SearchParameters searchParameters = new SearchParameters();
-            // searchParameters.setTags(params[0]);
+//            licences are not used currently
+//            searchParameters.setLicense("1,2,3,4,5,6,7,8");
             searchParameters.setMedia(MEDIA_TYPE_PHOTOS);
             searchParameters.setText(params[0]);
             // perform search request
@@ -81,7 +82,7 @@ public class LoadPhotoListTask extends AsyncTask<String, Void, PhotoList> {
                 // here the size of photo to be downloaded is determined by the method from Flickr API
                 mAdapter.add(photo.getLargeUrl());
             }
-//            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

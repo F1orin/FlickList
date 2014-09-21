@@ -1,20 +1,20 @@
 package ua.com.florin.flicklist.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import ua.com.florin.flicklist.BuildConfig;
 import ua.com.florin.flicklist.R;
 import ua.com.florin.flicklist.fragment.ImageGridFragment;
 import ua.com.florin.flicklist.util.MyConst;
@@ -33,9 +34,10 @@ import ua.com.florin.flicklist.util.MyConst;
  * Handles the clicks on NavigationDrawer's items
  * and replaces the corresponding fragments.
  */
-public class ImageGridActivity extends Activity {
-    @InjectView(R.id.categorySpinner)
-    Spinner mCategorySpinner;
+public class ImageGridActivity extends FragmentActivity {
+
+    @InjectView(R.id.view_pager)
+    ViewPager mViewPager;
 
     /**
      * Logging tag constant
@@ -43,14 +45,14 @@ public class ImageGridActivity extends Activity {
     private static final String TAG = "ImageGridActivity";
 
     /**
-     * An adapter that is used in spinner with categories
-     */
-    private ArrayAdapter<String> mSpinnerAdapter;
-
-    /**
      * A list of categories which is displayed in spinner
      */
     private List<String> mCategories;
+
+    /**
+     * An adapter for the ViewPager
+     */
+    ViewPagerAdapter mViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,28 +62,17 @@ public class ImageGridActivity extends Activity {
 
         // get categories from preferences
         mCategories = loadCategoriesFromPrefs();
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mViewPagerAdapter);
+    }
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        mSpinnerAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mCategories);
-        // Specify the layout to use when the list of choices appears
-        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        mCategorySpinner.setAdapter(mSpinnerAdapter);
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-        AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // define the selected category
-                String selectedCategory = (String) parent.getItemAtPosition(position);
-                loadFragment(selectedCategory);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        };
-        mCategorySpinner.setOnItemSelectedListener(spinnerListener);
+        SharedPreferences prefs = getSharedPreferences(MyConst.PREF_NAME_GENERAL, MODE_PRIVATE);
+        int currentPosition = prefs.getInt(MyConst.KEY_CURRENT_PAGER_POS, 0);
+        mViewPager.setCurrentItem(currentPosition);
     }
 
     @Override
@@ -89,8 +80,9 @@ public class ImageGridActivity extends Activity {
         super.onStop();
         saveArrayToPrefs(mCategories.toArray(new String[mCategories.size()]),
                 MyConst.CATEGORY_ARRAY_NAME,
-                MyConst.CATEGORY_PREF_NAME,
+                MyConst.PREF_NAME_CATEGORY,
                 this);
+        savePagerPositionToPrefs(mViewPager.getCurrentItem(), this);
     }
 
     @Override
@@ -105,7 +97,7 @@ public class ImageGridActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (item.getItemId()) {
+        switch (id) {
             case R.id.action_add:
                 addNewCategory();
                 return true;
@@ -119,23 +111,7 @@ public class ImageGridActivity extends Activity {
     }
 
     /**
-     * Loads fragment for the selected category into container
-     *
-     * @param category a string of selected category for which search will be performed
-     */
-    private void loadFragment(String category) {
-        Bundle bundle = new Bundle();
-        bundle.putString(MyConst.IMAGE_TAG_KEY, category);
-        // replace fragments
-        Fragment fragment = new ImageGridFragment();
-        fragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().
-                replace(R.id.container, fragment)
-                .commit();
-    }
-
-    /**
-     * Shows alert dialog for adding new category to spinner. Manages the adding process.
+     * Shows alert dialog for adding new category to pager. Manages the adding process.
      */
     private void addNewCategory() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -153,12 +129,11 @@ public class ImageGridActivity extends Activity {
                 String value = input.getText().toString();
                 // add it to the list of categories
                 mCategories.add(value);
-                // notify the adapter that data has changed
-                mSpinnerAdapter.notifyDataSetChanged();
-                // sort the categories in spinner
                 Collections.sort(mCategories);
+                // notify the adapter that data has changed
+                mViewPagerAdapter.notifyDataSetChanged();
                 // select the category that user has added
-                mCategorySpinner.setSelection(mSpinnerAdapter.getPosition(value));
+                mViewPager.setCurrentItem(mCategories.indexOf(value));
             }
         });
 
@@ -172,24 +147,18 @@ public class ImageGridActivity extends Activity {
     }
 
     /**
-     * Deletes category of images from spinner and performs actions to show the next category to user
+     * Deletes category of images from pager and performs actions to show the next category to user
      */
     private void deleteCategory() {
-        // identify the position of selected category
-        int position = mCategorySpinner.getSelectedItemPosition();
+        // identify the position and title of the selected category
+        int position = mViewPager.getCurrentItem();
+        String title = mCategories.get(position);
         // remove the category from the list
         mCategories.remove(position);
         // notify the adapter that list has changed
-        mSpinnerAdapter.notifyDataSetChanged();
-        // if the deleted item is the last avoid IndexOutOfBoundsException by setting the last
-        // item selected manually
-        if (position == mCategorySpinner.getCount()) {
-            mCategorySpinner.setSelection(position - 1);
-        }
-        // identify the next selected category
-        String category = (String) mCategorySpinner.getSelectedItem();
-        // show the images of the next selected category to the user
-        loadFragment(category);
+        mViewPagerAdapter.notifyDataSetChanged();
+        // make toast notification
+        Toast.makeText(this, title + " deleted", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -200,7 +169,7 @@ public class ImageGridActivity extends Activity {
      */
     private List<String> loadCategoriesFromPrefs() {
         List<String> mList;
-        String[] categories = loadArrayFromPrefs(MyConst.CATEGORY_ARRAY_NAME, MyConst.CATEGORY_PREF_NAME, this);
+        String[] categories = loadArrayFromPrefs(MyConst.CATEGORY_ARRAY_NAME, MyConst.PREF_NAME_CATEGORY, this);
         if (categories.length != 0) {
             mList = new ArrayList<String>(Arrays.asList(categories));
         } else {
@@ -216,11 +185,11 @@ public class ImageGridActivity extends Activity {
      * @param array     an array that should be saved
      * @param arrayName a name that will be used as array name in preferences
      * @param prefName  a name of the shared preference file
-     * @param mContext  application's context
+     * @param context   application's context
      * @return true if the new values were successfully written to persistent storage
      */
-    private boolean saveArrayToPrefs(String[] array, String arrayName, String prefName, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences(prefName, MODE_PRIVATE);
+    private boolean saveArrayToPrefs(String[] array, String arrayName, String prefName, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(prefName, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         // clear the previous array in preferences
         editor.clear();
@@ -240,12 +209,58 @@ public class ImageGridActivity extends Activity {
      * @return an array of strings loaded from shared preferences
      */
     private String[] loadArrayFromPrefs(String arrayName, String prefName, Context mContext) {
-        Log.d(TAG, "loadArrayFromPrefs");
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "loadArrayFromPrefs");
+        }
         SharedPreferences prefs = mContext.getSharedPreferences(prefName, MODE_PRIVATE);
         int size = prefs.getInt(arrayName + "_size", 0);
         String array[] = new String[size];
         for (int i = 0; i < size; i++)
             array[i] = prefs.getString(arrayName + "_" + i, null);
         return array;
+    }
+
+    /**
+     * Saves current selected position of ViewPager to shared preferences
+     *
+     * @param pagerPos selected position
+     * @param context  application's context
+     * @return true on operation success
+     */
+    private boolean savePagerPositionToPrefs(int pagerPos, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(MyConst.PREF_NAME_GENERAL, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(MyConst.KEY_CURRENT_PAGER_POS, pagerPos);
+        return editor.commit();
+    }
+
+    /**
+     * An adapter for the view pager that
+     */
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public android.support.v4.app.Fragment getItem(int i) {
+            return ImageGridFragment.newInstance(mCategories.get(i));
+        }
+
+        @Override
+        public int getCount() {
+            return mCategories.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mCategories.get(position);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return PagerAdapter.POSITION_NONE;
+        }
     }
 }
