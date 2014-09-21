@@ -5,6 +5,8 @@ FlickList
 
 ![Screenshot](/app/src/main/flicklist_screenshot.png)
 
+The main point of the application for now is to get aesthetic pleasure from browsing photos.
+
 #### Download
 - [FlickList.apk](https://www.dropbox.com/s/76pqqvmlni8nj5c/flicklist-release.apk?dl=0)
 
