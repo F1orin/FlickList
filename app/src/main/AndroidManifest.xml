@@ -26,7 +26,11 @@
         <activity
             android:name=".activity.ImageDetailActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".activity.ImageGridActivity" />
+            android:parentActivityName=".activity.ImageGridActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ImageGridActivity" />
+        </activity>
     </application>
 
 </manifest>
